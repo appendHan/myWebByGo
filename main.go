@@ -16,7 +16,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 func setupRouter() *gin.Engine {
 	// Disable Console Color
 	//gin.DisableConsoleColor()
-	rootBasePath := "D:/GoWorkSpare/bestACInCn/src"
+	rootBasePath := "D:/GoWorkSpare/myWebByGo/"
 
 	r := gin.Default()
 	//静态文件
