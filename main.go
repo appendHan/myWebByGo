@@ -28,35 +28,11 @@ func setupRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
-	// Simple group: v1
-	v1 := r.Group("/v1")
-	{
-		v1.POST("/read", func(context *gin.Context) {
-
-		})
-	}
-
 	r.GET("/", func(c *gin.Context) {
 		tmpIndex := models.TemplateIndex{
-			Title: "Home",
+			Title: "charRoom",
 		}
-		c.HTML(http.StatusOK, "index.html", tmpIndex)
-	})
-
-	// Ping test
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(200, "pong")
-	})
-
-	// Get user value
-	r.GET("/user/:name", func(c *gin.Context) {
-		user := c.Params.ByName("name")
-		value, ok := DB[user]
-		if ok {
-			c.JSON(200, gin.H{"user": user, "value": value})
-		} else {
-			c.JSON(200, gin.H{"user": user, "status": "no value"})
-		}
+		c.HTML(http.StatusOK, "chartRoom.html", tmpIndex)
 	})
 
 	// Authorized group (uses gin.BasicAuth() middleware)
