@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./web/models"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"net/http"
@@ -16,11 +17,11 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 func setupRouter() *gin.Engine {
 	// Disable Console Color
 	//gin.DisableConsoleColor()
-	rootBasePath := "D:/GoWorkSpare/myWebByGo/"
+	rootBasePath := "/Users/zhangsihang/Documents/GitHub/myWebByGo"
 
 	r := gin.Default()
 	//静态文件
-	r.Static("/static", rootBasePath + "/web/static")
+	r.Static("/static", rootBasePath+"/web/static")
 	//模板文件
 	r.LoadHTMLGlob(rootBasePath + "/web/templates/*")
 
@@ -30,18 +31,16 @@ func setupRouter() *gin.Engine {
 	// Simple group: v1
 	v1 := r.Group("/v1")
 	{
-		v1.POST("/login", func(context *gin.Context) {
-
-		})
 		v1.POST("/read", func(context *gin.Context) {
 
 		})
 	}
 
 	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title": "GoSpike",
-		})
+		tmpIndex := models.TemplateIndex{
+			Title: "Home",
+		}
+		c.HTML(http.StatusOK, "index.html", tmpIndex)
 	})
 
 	// Ping test
@@ -92,5 +91,5 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8080")
+	r.Run(":8082")
 }
