@@ -2,22 +2,26 @@ package main
 
 import (
 	"./web/models"
+	."./utils"
 	"github.com/gin-gonic/gin"
-	"html/template"
 	"net/http"
+	"github.com/gorilla/websocket"
+	"log"
+	"encoding/json"
 )
 
 var DB = make(map[string]string)
-
-func editHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("edit.html")
-	t.Execute(w, nil)
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
 }
+var tmpInt = 1
+
 
 func setupRouter() *gin.Engine {
 	// Disable Console Color
 	//gin.DisableConsoleColor()
-	rootBasePath := "/Users/zhangsihang/Documents/GitHub/myWebByGo"
+	rootBasePath := "D:/GoWorkSpare/myWebByGo"
 
 	r := gin.Default()
 	//静态文件
@@ -30,34 +34,33 @@ func setupRouter() *gin.Engine {
 
 	r.GET("/", func(c *gin.Context) {
 		tmpIndex := models.TemplateIndex{
-			Title: "charRoom",
+			Title: "chatRoom",
 		}
-		c.HTML(http.StatusOK, "chartRoom.html", tmpIndex)
+		c.HTML(http.StatusOK, "chatRoom.html", tmpIndex)
 	})
 
-	// Authorized group (uses gin.BasicAuth() middleware)
-	// Same than:
-	// authorized := r.Group("/")
-	// authorized.Use(gin.BasicAuth(gin.Credentials{
-	//	  "foo":  "bar",
-	//	  "manu": "123",
-	//}))
-	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
-		"foo":  "bar", // user:foo password:bar
-		"manu": "123", // user:manu password:123
-	}))
-
-	authorized.POST("admin", func(c *gin.Context) {
-		user := c.MustGet(gin.AuthUserKey).(string)
-
-		// Parse JSON
-		var json struct {
-			Value string `json:"value" binding:"required"`
+	r.GET("/ws", func(context *gin.Context) {
+		wsCon,err := upgrader.Upgrade(context.Writer,context.Request,nil)
+		if(err != nil){
+			return
 		}
-
-		if c.Bind(&json) == nil {
-			DB[user] = json.Value
-			c.JSON(200, gin.H{"status": "ok"})
+		for {
+			_, p, err := wsCon.ReadMessage()
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			var trans TransModel
+			json.Unmarshal(p,&trans)
+			switch trans.Method {
+				case "setName":
+					//log.Println("更新客户列表")
+					UpdateClient(trans.Uuid,trans.Data.(string),wsCon)
+				case "sendMsg":
+					BroadcastMsg(trans.Data)
+				case "Logout":
+					RemoveClient(trans.Uuid)
+			}
 		}
 	})
 
@@ -67,5 +70,5 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8082")
+	r.Run(":8083")
 }
