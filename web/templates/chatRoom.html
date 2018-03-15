@@ -6,12 +6,11 @@
         body { padding-top: 60px; }
     </style>
     <script>
-        console.log("nmb");
         var myInject = angular.module("myInject",[]);
         myInject.controller("ChatController", ["$scope", function($scope) {
             var socket = null;
-            var wsuri = "ws://127.0.0.1:8083/ws";
-            var uuid = Date.now();
+            var wsuri = "ws://" + location.host + location.pathname + "ws";
+            var uuid = Date.now().toString();
             $scope.messages = [];
             $scope.roster = [];
             $scope.name = '';
@@ -25,7 +24,7 @@
                 socket.send(JSON.stringify({"Method":"Logout","uuid":uuid,"Data": ""}));
             };
             socket.onclose = function (ev) {
-                socket.send(JSON.stringify({"Method":"Logout","uuid":uuid,"Data": ""}));
+                //socket.send(JSON.stringify({"Method":"Logout","uuid":uuid,"Data": ""}));
             };
             socket.onmessage = function (ev) {
                 console.log("message receiver:" + ev.data);
