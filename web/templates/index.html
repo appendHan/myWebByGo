@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+    body {padding-top: 60px;}
+</style>
   {{template "header" .}}
 </head>
   <body>
-    <h1>Hello, world!</h1>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar navbar-fixed-top navbar-inverse">
+          <div class="navbar-inner">
+              <div class="pull-right">
+                  <a class="brand">HOME</a>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="container">
+
+      <h1><a href="chatRoom">ChatRoom</a></h1>
+      <p>一个基于WebSocket的匿名聊天室，前端使用AngularJs绑定数据，服务端使用了 <a href="https://github.com/gorilla/websocket">gorilla</a> 的WebSocket框架</p>
+      <p>服务端使用大量channel用来异步广播及消息处理</p>
+
+  </div>
     {{template "footer" .}}
   </body>
 </html>

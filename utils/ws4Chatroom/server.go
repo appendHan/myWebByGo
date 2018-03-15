@@ -1,6 +1,5 @@
 package ws4Chatroom
 
-
 type hub struct {
 	//客户端列表
 	clients map[*client]bool
@@ -23,33 +22,29 @@ func NewAndRun() *hub {
 	return h
 }
 
-func(h *hub) run()  {
-	for{
+func (h *hub) run() {
+	for {
 		select {
-		case c := <- h.register:
+		case c := <-h.register:
 			//处理注册
 			h.clients[c] = true
-		case c := <- h.unRegister:
+		case c := <-h.unRegister:
 			//处理注销
 			if _, ok := h.clients[c]; ok {
 				delete(h.clients, c)
 				close(c.send)
 			}
-		case message := <- h.broadcast:
+		case message := <-h.broadcast:
 			//处理广播
-			for c := range h.clients{
+			for c := range h.clients {
 				select {
 				case c.send <- message:
 				default:
 					close(c.send)
-					delete(h.clients,c)
+					delete(h.clients, c)
 				}
 
 			}
 		}
 	}
 }
-
-
-
-

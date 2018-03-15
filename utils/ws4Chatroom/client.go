@@ -12,7 +12,7 @@ type client struct {
 	hub       *hub
 	clientCon *websocket.Conn
 	send      chan []byte
-	 *ClientModel
+	*ClientModel
 }
 type ClientModel struct {
 	Uuid             string
@@ -39,8 +39,8 @@ func ServeWs(s *hub, w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	clientModel := &ClientModel{"","无名氏",time.Now()}//数据模型
-	client := &client{s, wsCon, make(chan []byte, 256,),clientModel}
+	clientModel := &ClientModel{"", "无名氏", time.Now()} //数据模型
+	client := &client{s, wsCon, make(chan []byte, 256), clientModel}
 	client.hub.register <- client
 	go client.writePump()
 	go client.readPump()
@@ -70,16 +70,18 @@ func (c *client) readPump() {
 }
 
 func (c *client) writePump() {
-	for{
+	for {
 		select {
-		case message := <- c.send:
-			c.clientCon.WriteMessage(websocket.TextMessage,message)
+		case message := <-c.send:
+			c.clientCon.WriteMessage(websocket.TextMessage, message)
 		}
 	}
 }
 
-func (cm *ClientModel) setName(uuid string,name string){
-	if name != ""{cm.UserName = name}
+func (cm *ClientModel) setName(uuid string, name string) {
+	if name != "" {
+		cm.UserName = name
+	}
 	cm.Uuid = uuid
 }
 
@@ -87,8 +89,8 @@ func (cm *ClientModel) setName(uuid string,name string){
 func clientRefresh(c *client) {
 	//todo 这个方式不好，最好有hub维护一份统一的客户端列表，而不是每次重新计算
 	var clientMs []*ClientModel
-	for i :=range c.hub.clients{
-		clientMs = append(clientMs,i.ClientModel)
+	for i := range c.hub.clients {
+		clientMs = append(clientMs, i.ClientModel)
 	}
 	trans := TransModel{"ClientUpdate", c.Uuid, clientMs}
 	data, _ := json.Marshal(trans)
@@ -108,4 +110,3 @@ func handleBroadcast(c *client, msgJson interface{}) {
 	data, _ := json.Marshal(trans)
 	c.hub.broadcast <- data
 }
-

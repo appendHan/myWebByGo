@@ -22,6 +22,11 @@ func setupRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
+	r.GET("/", func(context *gin.Context) {
+		tmpIndex := models.TemplateIndex{Title: "Home"}
+		context.HTML(http.StatusOK, "index.html", tmpIndex)
+	})
+
 	//通过 channel 建立 单消费者-多生产者模式
 	wsServer := ws4Chatroom.NewAndRun()
 	chatRoom := r.Group("/chatRoom")
@@ -31,7 +36,7 @@ func setupRouter() *gin.Engine {
 			c.HTML(http.StatusOK, "chatRoom.html", tmpIndex)
 		})
 		chatRoom.GET("/ws", func(c *gin.Context) {
-			ws4Chatroom.ServeWs(wsServer,c.Writer, c.Request)
+			ws4Chatroom.ServeWs(wsServer, c.Writer, c.Request)
 		})
 	}
 
@@ -41,5 +46,5 @@ func setupRouter() *gin.Engine {
 func main() {
 	r := setupRouter()
 	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8083")
+	r.Run(":8080")
 }
