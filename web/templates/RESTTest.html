@@ -10,7 +10,7 @@
         myInject.controller("myController", ["$scope","$http", function($scope, $http) {
             $scope.Send = function Send() {
                 $http({
-                    method: 'GET',
+                    method: $('#method').text(),
                     url: './GET'
                 }).then(function successCallback(response) {
                     // 请求成功执行代码
@@ -19,7 +19,7 @@
                 });
             };
             $scope.Switch = function Switch(a) {
-                $('#method').text(a);
+                $('#method').html(a + '<span class="caret"></span>');
             }
         }])
     </script>
@@ -38,14 +38,15 @@
     <div class="btn-group">
         <button class="btn dropdown-toggle" data-toggle="dropdown" id="method">GET<span class="caret"></span></button>
         <ul class="dropdown-menu">
-            <li><a href="#" ng-click="Switch('POST')">POST</a></li>
-            <li class="active"><a href="#" ng-click="Switch('GET')">GET</a></li>
-            <li><a href="#" ng-click="Switch('PUT')">PUT</a></li>
-            <li><a href="#" ng-click="Switch('DELETE')">DELETE</a></li>
+            <li><a href="#" ng-click="Switch('POST')" id="POST">POST</a></li>
+            <li><a href="#" ng-click="Switch('GET')" id="GET">GET</a></li>
+            <li><a href="#" ng-click="Switch('PUT')" id="PUT">PUT</a></li>
+            <li><a href="#" ng-click="Switch('DELETE')" id="DELETE">DELETE</a></li>
         </ul>
     </div>
     <input type="url" class="input-medium search-query span9" value="https://www.baidu.com">
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-click="Send()">Send</button>
+    <textarea class="span10" title="body" style="margin-top: 30px;height: 200px"></textarea>
 </div>
     {{template "footer" .}}
 </body>
