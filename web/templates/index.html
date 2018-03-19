@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-    body {padding-top: 60px;}
-</style>
+    <style>
+        body {padding-top: 60px;}
+    </style>
   {{template "header" .}}
 </head>
   <body>
@@ -22,6 +22,9 @@
       <h1><a href="chatRoom">ChatRoom</a></h1>
       <p>一个基于WebSocket的匿名聊天室，前端使用AngularJs绑定数据，服务端使用了 <a href="https://github.com/gorilla/websocket">gorilla</a> 的WebSocket框架</p>
       <p>服务端使用大量channel用来异步广播及消息处理</p>
+
+      <h1><a href="RESTTest">RESTTest</a></h1>
+      <p>一个开发中的REST测试页面</p>
 
   </div>
     {{template "footer" .}}

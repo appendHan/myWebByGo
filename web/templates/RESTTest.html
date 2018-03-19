@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myInject">
+<head>
+    <style>
+        body {padding-top: 60px;}
+    </style>
+    {{template "header" .}}
+    <script>
+        var myInject = angular.module("myInject",[]);
+        myInject.controller("myController", ["$scope","$http", function($scope, $http) {
+            $scope.Send = function Send() {
+                $http({
+                    method: 'GET',
+                    url: './GET'
+                }).then(function successCallback(response) {
+                    // 请求成功执行代码
+                }, function errorCallback(response) {
+                    // 请求失败执行代码
+                });
+            };
+            $scope.Switch = function Switch(a) {
+                $('#method').text(a);
+            }
+        }])
+    </script>
+</head>
+<body ng-controller="myController">
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+            <div class="pull-right">
+                <a class="brand">RESTTest</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="btn-group">
+        <button class="btn dropdown-toggle" data-toggle="dropdown" id="method">GET<span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#" ng-click="Switch('POST')">POST</a></li>
+            <li class="active"><a href="#" ng-click="Switch('GET')">GET</a></li>
+            <li><a href="#" ng-click="Switch('PUT')">PUT</a></li>
+            <li><a href="#" ng-click="Switch('DELETE')">DELETE</a></li>
+        </ul>
+    </div>
+    <input type="url" class="input-medium search-query span9" value="https://www.baidu.com">
+    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-click="Send()">Send</button>
+</div>
+    {{template "footer" .}}
+</body>
+</html>

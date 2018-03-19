@@ -40,6 +40,17 @@ func setupRouter() *gin.Engine {
 		})
 	}
 
+	restTest := r.Group("/RESTTest")
+	{
+		restTest.GET("/", func(context *gin.Context) {
+			tmpIndex := models.TemplateIndex{Title: "RESTTest"}
+			context.HTML(http.StatusOK, "RESTTest.html", tmpIndex)
+		})
+		restTest.GET("/GET", func(context *gin.Context) {
+			
+		})
+	}
+
 	return r
 }
 
