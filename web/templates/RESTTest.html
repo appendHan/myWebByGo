@@ -29,25 +29,30 @@
     <div class="navbar navbar-fixed-top navbar-inverse">
         <div class="navbar-inner">
             <div class="pull-right">
-                <a class="brand">RESTTest</a>
+                <a class="navbar-brand">RESTTest</a>
             </div>
         </div>
     </div>
 </div>
-<div class="container">
-    <div class="btn-group">
-        <button class="btn dropdown-toggle" data-toggle="dropdown" id="method">GET<span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="#" ng-click="Switch('POST')" id="POST">POST</a></li>
-            <li><a href="#" ng-click="Switch('GET')" id="GET">GET</a></li>
-            <li><a href="#" ng-click="Switch('PUT')" id="PUT">PUT</a></li>
-            <li><a href="#" ng-click="Switch('DELETE')" id="DELETE">DELETE</a></li>
-        </ul>
+
+<form class="form-horizontal">
+    <div class="container">
+        <div class="form-group">
+            <div class="btn-group col-sm-2">
+                <button class="btn dropdown-toggle" data-toggle="dropdown" id="method">GET<span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#" ng-click="Switch('POST')" id="POST">POST</a></li>
+                    <li><a href="#" ng-click="Switch('GET')" id="GET">GET</a></li>
+                    <li><a href="#" ng-click="Switch('PUT')" id="PUT">PUT</a></li>
+                    <li><a href="#" ng-click="Switch('DELETE')" id="DELETE">DELETE</a></li>
+                </ul>
+            </div>
+            <input type="url" class="input-medium search-query col-sm-8" value="https://www.baidu.com">
+            <button class="btn btn-primary dropdown-toggle col-sm-2" data-toggle="dropdown" ng-click="Send()">Send</button>
+        </div>
+        <textarea class="form-control" title="body" style="margin-top: 30px;height: 200px"></textarea>
     </div>
-    <input type="url" class="input-medium search-query span9" value="https://www.baidu.com">
-    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ng-click="Send()">Send</button>
-    <textarea class="span10" title="body" style="margin-top: 30px;height: 200px"></textarea>
-</div>
+</form>
     {{template "footer" .}}
 </body>
 </html>

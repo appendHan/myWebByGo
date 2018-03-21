@@ -43,7 +43,6 @@ func (h *hub) run() {
 					close(c.send)
 					delete(h.clients, c)
 				}
-
 			}
 		}
 	}

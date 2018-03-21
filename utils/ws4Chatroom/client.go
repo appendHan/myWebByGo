@@ -51,13 +51,12 @@ func (c *client) readPump() {
 		_, p, err := c.clientCon.ReadMessage()
 		if err != nil {
 			log.Println(err)
-			return
+			break
 		}
 		var trans TransModel
 		json.Unmarshal(p, &trans)
 		switch trans.Method {
 		case "setName":
-			//log.Println("更新客户列表")
 			c.ClientModel.setName(trans.Uuid, trans.Data.(string))
 			clientRefresh(c)
 		case "sendMsg":
@@ -65,6 +64,7 @@ func (c *client) readPump() {
 		case "Logout":
 			c.hub.unRegister <- c
 			clientRefresh(c)
+			return
 		}
 	}
 }
@@ -72,7 +72,13 @@ func (c *client) readPump() {
 func (c *client) writePump() {
 	for {
 		select {
-		case message := <-c.send:
+		case message, ok := <-c.send:
+			if !ok {
+				// 通道已关闭
+				//c.clientCon.WriteMessage(websocket.CloseMessage, []byte{})
+				return
+			}
+			log.Println("疯狂写入中", message)
 			c.clientCon.WriteMessage(websocket.TextMessage, message)
 		}
 	}
