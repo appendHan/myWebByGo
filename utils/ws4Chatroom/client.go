@@ -78,7 +78,7 @@ func (c *client) writePump() {
 				//c.clientCon.WriteMessage(websocket.CloseMessage, []byte{})
 				return
 			}
-			log.Println("疯狂写入中", message)
+			//log.Println("疯狂写入中", message)
 			c.clientCon.WriteMessage(websocket.TextMessage, message)
 		}
 	}
